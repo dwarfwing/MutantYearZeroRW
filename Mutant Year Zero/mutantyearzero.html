@@ -2961,9 +2961,9 @@
         <ul>
           <li>Fixed issue with version updating during upgrade. The version would stay on 0 both for upgraded and new characters, this has now been fixed and should show 2.02.</li>     
           <li>Fixed issue with attributes total not setting after upgrade. </li>  
-          <li>Fixed issue with mutations not upgrading properly. Mutations that were not properly moved from v1 will now be added, unless they have already been readded. 
-            This is checked by using the mutations name, and could result in an additional mutation if the naming has changed from v1 and the readded one. 
-            Any added mutation while there are other readded ones will be marked with a asterisk* for clarity, and can be deleted if not nedded. </li>
+          <li>Fixed issue with mutations and armor not upgrading properly. Mutations and armor that were not properly moved from v1 will now be added, unless they have already been readded. 
+            This is checked by using the mutation or armor name, and could result in an mutations or armor reappearing if the name used has changed from v1 and the readded one. 
+            Any added mutation while there are other readded ones will be marked with a asterisk* for clarity, which can be deleted if not needed. </li>
           <li>Fixed issues with weapons upgrade where base, skill and grip was not updating properly.</li>
           <li>Set so that mutation points only upgrade when upgraded from version 1 and no mutationspoints has been added. If still needing the mutation points from version 1, they can be found on the settings page in the version 1 data list. </li>
           <li>Fixed issue with tab selection after upgrade when tab was NPC before upgrade. The NPC/Monster tab will now be selected, instead of a blank tab. This will also enable the legacy (v1) monster informaiton box (see below).</li>
@@ -4387,7 +4387,9 @@ function getSingleAttrAsync(prop){
         const bonus1_actual = int(armors.armor1_bonus) + int(armors.armor1_damage);
         const rating1 = bonus1_actual * (armors.armor1_equiped == 0 ? 0 : 1);
         //clog("Armor rating calculated: "+rating1);
-        newarmor1["repeating_armor_" + newrowid1 + "_name"] = armors.armor1_name;
+        var asterisk = "";
+        if ( old_version == float(2.01) ) { asterisk = "*"; }
+        newarmor1["repeating_armor_" + newrowid1 + "_name"] = armors.armor1_name + asterisk;
         newarmor1["repeating_armor_" + newrowid1 + "_rating"] = rating1;
         newarmor1["repeating_armor_" + newrowid1 + "_carried"] = 1;
         newarmor1["repeating_armor_" + newrowid1 + "_equipped"] = armors.armor1_equiped || 1;
