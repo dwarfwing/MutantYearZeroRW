@@ -64,6 +64,25 @@
             "checked": "unchecked",
             "displayname": "Display legacy (v1) NPC / Monster information, e.g. Abilities, Skills.",
             "displaytranslationkey": "adv-legacy-monster-info"			
-		}
+		},
+        {
+            "attribute": "chartype",
+            "type": "select",
+            "displayname": "Default character type:",
+            "displaytranslationkey": "default-char-type",
+            "options": [
+                "Mutant|Mutant",
+                "Animal|Animal",
+                "Robot|Robot",
+                "Human|Human"
+            ],
+            "optiontranslationkeys": [
+                "mutant",
+                "animal",
+                "robot",
+                "human"
+            ],
+            "default": "Mutant"
+        }
 	]
 }

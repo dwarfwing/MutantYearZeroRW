@@ -2959,26 +2959,29 @@
       <span>v2.02</span> <!-- Also need to update the version in Sheet worker code below -->
       <li>Fixed upgrade issues, e.g. active tab, identifying version 1 upgrades vs new sheets better.        
         <ul>
-          <li>ixed issue with version updating during upgrade. The version would stay on 0 both for upgraded and new characters, this has now been fixed.</li>     
-          <li>ixed issue with attributes total not setting after upgrade. </li>
+          <li>Fixed issue with version updating during upgrade. The version would stay on 0 both for upgraded and new characters, this has now been fixed and should show 2.02.</li>     
+          <li>Fixed issue with attributes total not setting after upgrade. </li>  
+          <li>Fixed issue with mutations not upgrading properly. Mutations that were not properly moved from v1 will now be added, unless they have already been readded. 
+            This is checked by using the mutations name, and could result in an additional mutation if the naming has changed from v1 and the readded one. 
+            Any added mutation while there are other readded ones will be marked with a asterisk* for clarity, and can be deleted if not nedded. </li>
           <li>Fixed issues with weapons upgrade where base, skill and grip was not updating properly.</li>
-          <li>Set so that mutation points only upgrade when upgraded from version 1. If still needing the mutation points from version 1, they can be found on the settings page in the version 1 data list. </li>
-          <li>Fixed issue with tab selection after upgrade when tab was NPC before upgrade. The NPC/Monster tab will now be selected, instead of a blank tab.</li>
+          <li>Set so that mutation points only upgrade when upgraded from version 1 and no mutationspoints has been added. If still needing the mutation points from version 1, they can be found on the settings page in the version 1 data list. </li>
+          <li>Fixed issue with tab selection after upgrade when tab was NPC before upgrade. The NPC/Monster tab will now be selected, instead of a blank tab. This will also enable the legacy (v1) monster informaiton box (see below).</li>
           <li>Added an expandable list at the bottom of the settings page with the previous version 1 data, e.g. mutation points, armor, monster info.</li>
         </ul>
       </li>
       <li>Fixed issue with attributes max values, including monster strength. Attributes max value is now 12, except for Strength on the NPC/Monster page that has a maximum of 40. </li>
       <li>Fixed strength biohazard damage display issue on the NPC/Monster tab. One biohazard was misnamed in the stylesheet and not displaying, this is now resolved. </li>
       <li>Fixed issue with attribute totals on opening of sheet. Attribute totals are now re-calculated on sheet opening. </li>
-      <li>Fixed an issue whereby Grub / Food was not included in the encumberance calculation.</li>
+      <li>Fixed an issue whereby Grub / Food was not included in the encumberance calculation. </li>
       <li>Fixed translation for pack mule talent and conditions.</li>
       <li>Fixed legacy (v1) monster information, now optional to display in NPC / Monster tab. The information can be found in the Attributres and Abilities tab, 
-        e.g. description, Skills, Weapons and Armor attributes. However, since the abilities is a repeating section it doesnt show there. 
-        The information can also be found in the version 1 data list on the Settings tab. </li>
-        <li>Fixed and readded the D666 button on popular demand.</li>
-        <li>Fixed the Initiative button - it now tries to add the selected token to the Turn Tracker. This works well for the players, who can normally only control and select their own token. 
-          For the GM you will need to keep track of the token selected when you click Initiative. If no token selected, and informative notice will be posted in chat.</li>
-      <li>Added background image for the rolltemplate.</li>
+        e.g. description, Skills, Weapons and Armor attributes. The information can also be found in the version 1 data list on the Settings tab. </li>
+      <li>Fixed and readded the D666 button on popular demand.</li>
+      <li>Fixed the Initiative button - it now tries to add the selected token to the Turn Tracker. This works well for the players, who can normally only control and select their own token. 
+        For the GM you will need to keep track of the token selected when you click Initiative. If no token selected, and informative notice will be posted in chat.</li>
+        <li>Added background image for the rolltemplate.</li>
+        <li>Added option to select default character type for new characters in the sheet.json, so that it can be selected in the Game Settings.</li>
     </ol>
     <br />
     <span data-i18n-title="announcements-older-show"><span data-i18n="old-announcements">Older Announcements</span></span>  
@@ -4026,19 +4029,19 @@ function getSingleAttrAsync(prop){
 
     // Test for upgrade from previous version 1.x (by checking for previous Attributes)
     var test = await getAttrsAsync(["chartype", "adv-modifiers", "header-bgimg", "rot_permenant", "rot_permanent", "strength_max", "agility_max", "wits_max", "empathy_max", "ark_culture"]); 
-    clog("Test prev version: " + JSON.stringify(test));
-    clog("Test prev version 2: " + ( ( test.strength_max || test.agility_max || test.wits_max || test.empathy_max ) === undefined));
-    clog("Test prev version 3: " + ( test.strength_max === undefined || test.agility_max === undefined || test.wits_max === undefined || test.empathy_max === undefined ));
+    //clog("Test prev version: " + JSON.stringify(test));
+    //clog("Test prev version 2: " + ( ( test.strength_max || test.agility_max || test.wits_max || test.empathy_max ) === undefined));
+    //clog("Test prev version 3: " + ( test.strength_max === undefined || test.agility_max === undefined || test.wits_max === undefined || test.empathy_max === undefined ));
     const prev_version_one = ( test.strength_max === undefined && test.agility_max === undefined && test.wits_max === undefined && test.empathy_max === undefined ) ? 0 : 1;
-    clog("prev_version_one: "+prev_version_one);
+    //clog("prev_version_one: "+prev_version_one);
 
     // Test for upgrade from previous version 1.x (by checking for previous Attributes)
     var test2 = await getAttrsAsync(["strength_total", "agility_total", "wits_total", "empathy_total"]); 
-    clog("Test prev version two: " + JSON.stringify(test2));
-    clog("Test prev version two 1: " + (( test2.strength_total && test2.agility_total && test2.wits_total && test2.empathy_total ) === 0));
-    clog("Test prev version two 2: " + ( test2.agility_total === 0 && test2.wits_total === 0 && test2.empathy_total === 0 ));
+    //clog("Test prev version two: " + JSON.stringify(test2));
+    //clog("Test prev version two 1: " + (( test2.strength_total && test2.agility_total && test2.wits_total && test2.empathy_total ) === 0));
+    //clog("Test prev version two 2: " + ( test2.agility_total === 0 && test2.wits_total === 0 && test2.empathy_total === 0 ));
     const prev_version_two = ( test2.agility_total === 0 && test2.wits_total === 0 && test2.empathy_total === 0 ) ? 0 : 1;
-    clog("prev_version_two: "+prev_version_two);
+    //clog("prev_version_two: "+prev_version_two);
 
     //clog("old_version 1 = "+old_version);
     //if (!old_version) old_version = 2.01; // New sheet
@@ -4047,11 +4050,11 @@ function getSingleAttrAsync(prop){
     // Set version based on old_version and old attributes - DEPRECATED
     /*
     if ( !old_version && prev_version_one == 1 ) {  // Also updates v 2.01!!!
-        clog("Not old_version and prev_version_one is 1"); 
+        clog("Not old_version and prev_version_one is 1, setting old version to 1.12"); 
         old_version = 1.12;
     } else if ( !old_version && prev_version_one == 0 ) {  // New sheet
-        clog("Not old_version and prev_version_one is 0");
-        old_version = 2.02; 
+        clog("Not old_version and prev_version_one is 0, setting old version to 2.02");
+        old_version = 2.01; 
     } 
     else { // ( old_version && prev_version_one == 0 )
         clog("else do 2.01 upgrade");
@@ -4134,41 +4137,42 @@ function getSingleAttrAsync(prop){
     var values = {};
     const charname = await getAttrsAsync(["character_name"]);
     
-    clog(`** UPDATE OF "${charname.character_name}" TO V2.0 FROM ${old_version} DETECTED **`);
+    clog(`** UPDATING "${charname.character_name}" TO V2.0 FROM ${old_version} **`);
     
     // On upgrade, set character type to Mutant
     if (old_version < 2.01) {
-        clog(`Upgrade ${charname.character_name}: Setting character type Mutant.`);
+        //clog(`Upgrade ${charname.character_name}: Setting character type Mutant.`);
         await setAttrsAsync({chartype: "Mutant"});
     }
     
     // On upgrade, turn off modifiers
     if (old_version < 2.01) {
-        clog(`Upgrade ${charname.character_name}: Turning off modifiers.`);
+        //clog(`Upgrade ${charname.character_name}: Turning off modifiers.`);
         await setAttrsAsync({"adv-modifiers": 0});;
     }
     
     // On upgrade, turn on Mutant headers
     if (old_version < 2.01) {    
-        clog(`Upgrade ${charname.character_name}: using image header backgrounds.`);
+        //clog(`Upgrade ${charname.character_name}: using image header backgrounds.`);
         await setAttrsAsync({"header-bgimg": 1});
     }
 
     // On upgrade, change tab according to new tab naming
     if (old_version < 2.01) {
       const tab = await getAttrsAsync(["tab"]);
-      clog(`Upgrading tab, current is ${tab.tab}`);
+      //clog(`Upgrading tab, current is ${tab.tab}`);
       switch (tab.tab) {
         case "log" :
           await setAttrsAsync({tab: "zonelog"});
-          clog("Setting tab from Log to Zonelog");
+          //clog("Setting tab from Log to Zonelog");
           break;
         case "npc" :
           await setAttrsAsync({tab: "monster"});
-          clog("Setting tab from Npc to Monster");
+          await setAttrsAsync({"force_show_monsterinfo":1});          
+          clog("Setting tab from Npc to Monster, and showing legacy npc info.");
           break;
         default: 
-          clog("No need to update tab");
+          //clog("No need to update tab");
       }       
     }
     
@@ -4182,22 +4186,29 @@ function getSingleAttrAsync(prop){
         //charname = values.character_name;
 
         // Set attributes to the attribute_max value from v1 
-        clog(`Testing attribute ${attr}_total exists (): ${(!values[attr+"_total"] || values[attr+"_total"] == 0)}`);
+        //clog(`Testing attribute ${attr}_total exists (): exists ${(!values[attr+"_total"])} or is zero ${(values[attr+"_total"] == 0)}`);
         // if (!values[attr+"_total"] || values[attr+"_total"] == 0) { // replaced with old version test
-        if (old_version < 2) {
-            clog(`Upgrading attribute ${attr} from v1 version`)
-            attrib[attr] = values[attr+"_max"]; 
+        //clog(`Old version test: ${old_version < 2}`);
+        //clog(`Testing if ${attr}_max exists: ${values[attr+"_max"]}`);
+        //clog(`Testing is ${attr} is not equal to ${attr}_max: ${values[attr] != values[attr+"_max"]}`);
+        //clog(`Set ${attr} to ${attr}_max test: ${(old_version < 2 || (values[attr+"_max"] && (values[attr] != values[attr+"_max"])) )}`);
+        if (old_version < 2 || (values[attr+"_max"] && (values[attr] != values[attr+"_max"])) ) {
+            attrib[attr] = int(values[attr+"_max"]); 
+            //clog(`Upgrading attribute ${attr} from v1 version ${values[attr+"_max"]} to v2 ${values[attr]}`);
             if (attr == "strength") {
                 // Set strength attributes for PC and Monster to attribute_max value
                 attrib["strength_pc"] = values["strength_max"];
                 attrib["strength_monster"] = values["strength_max"];
+                //clog(`Attrib is Strength, pc = ${attrib["strength_pc"]} and Monster is ${attrib["strength_monster"]}`);
             }
+        } else {
+          attrib[attr] = int(values[attr]);
         }
-        clog(`Attributes ${attr} damage is ${int(values[damages[attr]])}`);
+        //clog(`Attributes ${attr} damage is ${int(values[damages[attr]])}`);
         attrib[attr+"_total"] = attrib[attr] - int(values[damages[attr]]);
-        clog("Attributes attrib: "+JSON.stringify(attrib));
+        //clog("Attributes attrib: "+JSON.stringify(attrib));
         const attr_name = getSkillName(attr);
-        clog(`Upgrade ${charname} attribute ${attr_name} from ${attr_name}_max ${values[attr+"_max"]} to ${attr_name} ${attrib[attr]} with total ${attrib[attr+"_total"]}.`);            
+        clog(`Set ${charname.character_name} attribute ${attr_name} from ${attr_name}_max ${values[attr+"_max"]} to ${attr_name} ${attrib[attr]} with total ${attrib[attr+"_total"]}.`);            
         await setAttrsAsync(attrib);        
     });
 
@@ -4205,19 +4216,19 @@ function getSingleAttrAsync(prop){
     // Upgrade apprearance - no need
     // Upgrade injuries - non need
     // Upgrade rot - 
-    clog("Pre Upgrade rot points");
+    //clog("Pre Upgrade rot points");
     const rot = await getAttrsAsync(["rot_permenant", "rot_permanent"]);
-    clog("Upgrade rot points test 1, permenant exists : "+ rot.rot_permenant);
-    clog("Upgrade rot points test 2, permanent : "+ rot.rot_permanent);    
+    //clog("Upgrade rot points test 1, permenant exists : "+ rot.rot_permenant);
+    //clog("Upgrade rot points test 2, permanent : "+ rot.rot_permanent);    
     const permenant = int(rot.rot_permenant || 0),
         permanent = int(rot.rot_permanent);
-    clog("Upgrade rot points test 3, permenant > permanent : "+ (permenant > permanent) );
+    //clog("Upgrade rot points test 3, permenant > permanent : "+ (permenant > permanent) );
     if (permenant > permanent) {
-        clog(`Upgrade ${charname.character_name} permanent rot points from ${permanent} to ${permenant}`);
+        clog(`Upgrading ${charname.character_name} permanent rot points from ${permanent} to ${permenant}`);
         await setAttrsAsync({rot_permanent: permenant});
     }  
     rot["value"] = await getAttrsAsync(["rot_permanent"]);          
-    clog(`Post Upgrade ${charname.character_name} permanent rot points ${rot.value.rot_permanent}`);
+    //clog(`Post Upgrade ${charname.character_name} permanent rot points ${rot.value.rot_permanent}`);
   
     // Upgrade experience - no need, same attribute
     
@@ -4230,20 +4241,20 @@ function getSingleAttrAsync(prop){
     var muts_actioned = false; 
     // Collect new mutaitons, if any
     const mutationIds = await getSectionIDsAsync("repeating_mutations");
-    clog("Mutation IDs list: "+ JSON.stringify(mutationIds));
-    clog("Mutation IDs length: "+ mutationIds.length);
+    //clog("Mutation IDs list: "+ JSON.stringify(mutationIds));
+    //clog("Mutation IDs length: "+ mutationIds.length);
     const mutations = [];
     mutationIds.forEach( async (mutationId) => {
       const muts = await getAttrsAsync(["repeating_mutations_"+mutationId+"_name", "repeating_mutations_"+mutationId+"_description"]);
       mutations.push({name: muts["repeating_mutations_"+mutationId+"_name"], description: muts["repeating_mutations_"+mutationId+"_description"]});
-      clog("Mutation names: "+JSON.stringify(mutations));
+      //clog("Mutation names: "+JSON.stringify(mutations));
     });
     // Collect old mutantions, if any
     const mutantionIds = await getSectionIDsAsync("repeating_mutantions");
-    clog("Mutations list: "+ JSON.stringify(mutationIds));
-    clog("Mutations length: "+ mutationIds.length);
-    clog("Mutantion IDs list: "+ JSON.stringify(mutantionIds));
-    clog("Mutantion IDs list: "+ mutantionIds.length);
+    //clog("Mutations list: "+ JSON.stringify(mutationIds));
+    //clog("Mutations length: "+ mutationIds.length);
+    //clog("Mutantion IDs list: "+ JSON.stringify(mutantionIds));
+    //clog("Mutantion IDs list: "+ mutantionIds.length);
 
     if(mutantionIds.length > 0 && mutationIds.length < mutantionIds.length) {
         mutantionIds.forEach( async (mutantionsId) => {
@@ -4251,18 +4262,20 @@ function getSingleAttrAsync(prop){
             const name = values["repeating_mutantions_"+mutantionsId+"_mutantion_name"],
             description = values["repeating_mutantions_"+mutantionsId+"_mutantion_description"],
             newrowid = generateRowID();
-            clog(`Found ${charname.character_name}'s mutantion ${name}.`);
+            //clog(`Found ${charname.character_name}'s mutantion ${name}.`);
             const found = mutations.find(element => element.name == name);
-            clog("Mutantion and mutations doesnt match? "+(found === undefined));
+            //clog("Mutantion and mutations doesnt match? "+(found === undefined));
             if (!found) { 
-                clog("Couldnt find match to "+name); 
+                //clog("Couldnt find match to "+name); 
             } else {
-                clog("Found match to "+name); 
+                //clog("Found match to "+name); 
             }
+            var asterisk = "";
+            if ( mutationIds.length > 0) { asterisk = "*"; }
             if(found === undefined) {  // No match for mutantion in the new mutations list
-                clog(`Upgrade ${charname.character_name}'s mutantion ${name}.`);
+                clog(`Upgrading ${charname.character_name}'s mutantion ${name}.`);
                 let newmutation = {};
-                newmutation["repeating_mutations_"+newrowid+"_name"] = name;
+                newmutation["repeating_mutations_"+newrowid+"_name"] = name + asterisk;
                 newmutation["repeating_mutations_"+newrowid+"_description"] = description;
                 newmutation["repeating_mutations_"+newrowid+"_rank"] = 1;
                 newmutation["repeating_mutations_"+newrowid+"_powerlevel"] = 1;
@@ -4276,17 +4289,17 @@ function getSingleAttrAsync(prop){
 
     // Mutation points
     const mp = await getAttrsAsync(["mutation", "mutationpoints", "character_name"]);
-    clog(`${charname.character_name} mutation points mutation: ${mp.mutation}`);
-    clog(`${charname.character_name} mutation points mutationpoints: ${mp.mutationpoints}`);
-    clog("Testing mutpoints 0: " + old_version );
-    clog(`Testing mutpoints 1: ${ old_version < float(2.01) } `);
-    clog(`Testing mutpoints 2: ${ int(mp.mutation) != 0 } `);
-    clog(`Testing mutpoints 3: ${ int(mp.mutationpoints) == 0 } `);
-    if (old_version < 2.01 && mp.mutation != 0 && mp.mutationpoints == 0) {      
+    //clog(`${charname.character_name} mutation points mutation: ${mp.mutation}`);
+    //clog(`${charname.character_name} mutation points mutationpoints: ${mp.mutationpoints}`);
+    //clog("Testing mutpoints 0: " + old_version );
+    //clog(`Testing mutpoints 1: ${ old_version < float(2.01) } `);
+    //clog(`Testing mutpoints 2: ${ int(mp.mutation) != 0 } `);
+    //clog(`Testing mutpoints 3: ${ int(mp.mutationpoints) == 0 } `);
+    if (old_version < float(2.01) && int(mp.mutation) != 0 && int(mp.mutationpoints) == 0) {      
       //charname = mp.character_name;
       //clog("Mutations ationed: "+muts_actioned);
       //clog("Mutation points upgrade check: "+ (!mutation && !muts_actioned) || !mutationpoints );
-      clog(`Upgrade ${charname.character_name} mutation points using mutantion points ${mp.mutation}`);
+      clog(`Upgrading ${charname.character_name} mutation points using v1 mutantion points ${mp.mutation}`);
       setAttrs({mutationpoints: mp.mutation});
     } else {
       clog("Mutation points not upgraded in version 2+, or when mutantion is 0, or mutationpoints is bigger than 0.");
@@ -4297,8 +4310,8 @@ function getSingleAttrAsync(prop){
     const weaponIds = await getSectionIDsAsync("repeating_weapons");
     weaponIds.forEach( async (weaponId) => {
         var values = await getAttrsAsync(["repeating_weapons_"+weaponId+"_weapon_name", "repeating_weapons_"+weaponId+"_weapon_skill", "repeating_weapons_"+weaponId+"_weapon_skill_misc", "repeating_weapons_"+weaponId+"_weapon_bonus", "repeating_weapons_"+weaponId+"_weapon_bonus_max", "repeating_weapons_"+weaponId+"_weapon_damage", "repeating_weapons_"+weaponId+"_weapon_damage_misc", "repeating_weapons_"+weaponId+"_weapon_range", "repeating_weapons_"+weaponId+"_weapon_features", "repeating_weapons_"+weaponId+"_weapon_grip", "repeating_weapons_"+weaponId+"_weapon_weight", "repeating_weapons_"+weaponId+"_weapon_carried", "strength_total", "agility_total", "shoot", "fight", "character_name"]);
-        clog(`Upgrade weapon attributes: Weapon ${values["repeating_weapons_"+weaponId+"_weapon_name"]} with bonus ${int(values["repeating_weapons_"+weaponId+"_weapon_bonus"])} and damage ${int(values["repeating_weapons_"+weaponId+"_weapon_damage"])} up to ${values["repeating_weapons_"+weaponId+"_weapon_range"]} distance.`);
-        clog("Weapon upgrade json: "+ JSON.stringify(values));
+        //clog(`Upgrade weapon attributes: Weapon ${values["repeating_weapons_"+weaponId+"_weapon_name"]} with bonus ${int(values["repeating_weapons_"+weaponId+"_weapon_bonus"])} and damage ${int(values["repeating_weapons_"+weaponId+"_weapon_damage"])} up to ${values["repeating_weapons_"+weaponId+"_weapon_range"]} distance.`);
+        //clog("Weapon upgrade json: "+ JSON.stringify(values));
         const name = values["repeating_weapons_"+weaponId+"_weapon_name"],
         skill = int(values["repeating_weapons_"+weaponId+"_weapon_skill"] || 0),
         //skill_misc = int(values["repeating_weapons_"+weaponId+"_weapon_skill_misc"] || 0),
@@ -4340,40 +4353,40 @@ function getSingleAttrAsync(prop){
         weapon["repeating_weapons_"+weaponId+"_weapon_weight"] = values["repeating_weapons_"+weaponId+"_weapon_weight"] || 1;
         weapon["repeating_weapons_"+weaponId+"_weapon_features"] = values["repeating_weapons_"+weaponId+"_weapon_features"] || "";
 
-        clog("Updating weapon: "+JSON.stringify(weapon));
+        //clog("Updating weapon: "+JSON.stringify(weapon));
         await setAttrsAsync(weapon);
     });
   
     // Upgrade armor to repeating section
 
     var armorIds = await getSectionIDsAsync("repeating_armor");
-    clog("New armor IDs: "+ JSON.stringify(armorIds));
+    //clog("New armor IDs: "+ JSON.stringify(armorIds));
 
     const armor_names = [];
     var val = "";
     armorIds.forEach( async (armorId) => {
         val = await getAttrsAsync(["repeating_armor_"+armorId+"_name"]);
         armor_names.push(val["repeating_armor_"+armorId+"_name"]);
-        clog("Armor names: "+JSON.stringify(armor_names));
+        //clog("Armor names: "+JSON.stringify(armor_names));
     });
-    clog("Armor names: "+ JSON.stringify(armor_names));
+    //clog("Armor names: "+ JSON.stringify(armor_names));
       
     var armors = await getAttrsAsync(["armor1_ar", "armor1_bonus", "armor1_damage", "armor1_equiped", "armor1_name", "armor2_ar", "armor2_bonus", "armor2_damage", "armor2_equiped", "armor2_name", "character_name"]);
   
     var newarmor1 = {};
 
-    clog("Upgrade armor1 name: "+armors.armor1_name);
-    clog("Upgrade armor1 bonus: "+armors.armor1_bonus);
-    clog("Upgrade armor1 name not found: "+(armor_names.find(element => element == armors.armor1_name) === undefined));
-    clog(`Upgrade ${charname.character_name}'s Armor1 ${armors.armor1_name} with bonus ${armors.armor1_bonus} and damage ${armors.armor1_damage}, equipped ${armors.armor1_equiped}`);
+    //clog("Upgrade armor1 name: "+armors.armor1_name);
+    //clog("Upgrade armor1 bonus: "+armors.armor1_bonus);
+    //clog("Upgrade armor1 name not found: "+(armor_names.find(element => element == armors.armor1_name) === undefined));
+    //clog(`Upgrading ${charname.character_name}'s Armor1 ${armors.armor1_name} with bonus ${armors.armor1_bonus} and damage ${armors.armor1_damage}, equipped ${armors.armor1_equiped}`);
 
     if (armors.armor1_name && armors.armor1_bonus && (armor_names.find(element => element == armors.armor1_name) === undefined)) {
         //clog("Upgrading Armor1 : " + armors.armor1_name + " with bonus : "+ armors.armor1_bonus +".");
-        clog(`Upgrade ${charname.character_name}'s Armor1 ${armors.armor1_name} with bonus ${armors.armor1_bonus} and damage ${armors.armor1_damage}, equipped ${armors.armor1_equiped}`);
+        clog(`Upgrading ${charname.character_name}'s Armor1 ${armors.armor1_name} with bonus ${armors.armor1_bonus} and damage ${armors.armor1_damage}, equipped ${armors.armor1_equiped}`);
         const newrowid1 = generateRowID();
         const bonus1_actual = int(armors.armor1_bonus) + int(armors.armor1_damage);
         const rating1 = bonus1_actual * (armors.armor1_equiped == 0 ? 0 : 1);
-        clog("Armor rating calculated: "+rating1);
+        //clog("Armor rating calculated: "+rating1);
         newarmor1["repeating_armor_" + newrowid1 + "_name"] = armors.armor1_name;
         newarmor1["repeating_armor_" + newrowid1 + "_rating"] = rating1;
         newarmor1["repeating_armor_" + newrowid1 + "_carried"] = 1;
@@ -4384,26 +4397,26 @@ function getSingleAttrAsync(prop){
         newarmor1["repeating_armor_" + newrowid1 + "_weight"] = 1;
         newarmor1["repeating_armor_" + newrowid1 + "_features"] = '';
 
-        clog("upgrading armor 1: "+JSON.stringify(newarmor1));
+        //clog("upgrading armor 1: "+JSON.stringify(newarmor1));
         await setAttrsAsync(newarmor1);
     } else {
-        clog("No need to upgrade Armor_1");
+        //clog("No need to upgrade Armor_1");
     }
 
     var newarmor2 = {};
 
     //clog("Upgrade armor2 name: "+armors.armor2_name);
     //clog("Upgrade armor2 bonus: "+armors.armor2_bonus);
-    clog("Upgrade armor1 name not found: "+(armor_names.find(element => element == armors.armor1_name) === undefined));
+    //clog("Upgrade armor1 name not found: "+(armor_names.find(element => element == armors.armor1_name) === undefined));
     //clog(`Upgrade ${charname.character_name}'s Armor2 ${armors.armor2_name} with bonus ${armors.armor2_bonus} and damage ${armors.armor2_damage}, equipped ${armors.armor2_equiped}`);
 
     if (armors.armor2_bonus && armors.armor2_name && armor_names.find(element => element == armors.armor2_name) === undefined) {
         //clog("Upgrading Armor2 : " + armors.armor2_name + " with bonus : "+ armors.armor2_bonus +".");
-        clog(`Upgrade ${charname.character_name}'s Armor2 ${armors.armor2_name} with bonus ${armors.armor2_bonus} and damage ${armors.armor2_damage}, equipped ${armors.armor2_equiped}`);
+        clog(`Upgrading ${charname.character_name}'s Armor2 ${armors.armor2_name} with bonus ${armors.armor2_bonus} and damage ${armors.armor2_damage}, equipped ${armors.armor2_equiped}`);
         const newrowid2 = generateRowID();
         const bonus2_actual = int(armors.armor2_bonus) + int(armors.armor2_damage);
         const rating2 = bonus2_actual * (armors.armor2_equiped == 0 ? 0 : 1);
-        clog("Armor rating calculated: "+rating2);
+        //clog("Armor rating calculated: "+rating2);
         newarmor2["repeating_armor_" + newrowid2 + "_name"] = armors.armor2_name;
         newarmor2["repeating_armor_" + newrowid2 + "_rating"] = rating2;
         newarmor2["repeating_armor_" + newrowid2 + "_carried"] = 1;
@@ -4414,10 +4427,10 @@ function getSingleAttrAsync(prop){
         newarmor2["repeating_armor_" + newrowid2 + "_weight"] = 1;
         newarmor2["repeating_armor_" + newrowid2 + "_features"] = '';
         
-        clog("upgrading armor 2: "+JSON.stringify(newarmor2));
+        //clog("upgrading armor 2: "+JSON.stringify(newarmor2));
         await setAttrsAsync(newarmor2);
     } else {
-        clog("No need to upgrade Armor_2");
+        //clog("No need to upgrade Armor_2");
     }
 
   
@@ -4442,7 +4455,7 @@ function getSingleAttrAsync(prop){
     war = dev_war || int(values.ark_warfare);
     //charname = values.character_name;
     clog(`Upgrade ${charname.character_name}'s ark development levels: food ${food}, culture ${culture}, technology ${tech}, and warfare ${war}.`);
-    clog("Dev levels json: "+ JSON.stringify(values));
+    //clog("Dev levels json: "+ JSON.stringify(values));
     await setAttrsAsync({
         ark_dev_food: food,
         ark_dev_cult: culture,
