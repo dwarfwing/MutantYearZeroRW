@@ -5346,11 +5346,11 @@ function getSingleAttrAsync(prop){
       getAttrs([stat, "tab"], function (values) {
         const total = int(values[stat]);
         const tab = values.tab;
-        clog("Attribute "+stat+" on tab "+tab+" is "+total);
-        clog("tab === 'monster' = "+(tab === 3 || tab === 'monster'));
+        //clog("Attribute "+stat+" on tab "+tab+" is "+total);
+        //clog("tab === 'monster' = "+(tab === 3 || tab === 'monster'));
         var max = tab === 'monster' ? 12 : 6;
         // const max attribute = 12 for monsters; 
-        clog("tab === 'monster' && stat === strength_monster = "+tab === 'monster' && stat === 'strength_monster');
+        //clog("tab === 'monster' && stat === strength_monster = "+tab === 'monster' && stat === 'strength_monster');
         max = tab === 'monster' && stat === 'strength_monster' ? 40 : 12;
         // const max strength = 40 for monsters; 
         const settings = checkMax(stat, total, max);
